@@ -7,10 +7,9 @@ $this->breadcrumbs = array(
 );
 
 $this->menu = array(
-    array('label' => Yii::t('user', 'Добавить пользователя'), 'url' => array('create')),
-    array('label' => Yii::t('user', 'Список пользователей'), 'url' => array('index')),
-    array('label' => Yii::t('user', 'Регистрации'), 'url' => array('/user/registration/admin')),    
-    array('label' => Yii::t('user', 'Авторизационные данные'), 'url' => array('/user/login/admin')),
+    array('label' => Yii::t('user', 'Добавить пользователя'), 'url' => array('create')),    
+    array('label' => Yii::t('user', 'Восстановления паролей'), 'url' => array('/user/recoveryPassword/admin')),            
+    array('label' => Yii::t('user', 'Регистрации'), 'url' => array('/user/registration/admin')),            
 );
 
 Yii::app()->clientScript->registerScript('search', "
@@ -68,18 +67,11 @@ $this->widget('zii.widgets.grid.CGridView', array(
 	    'buttons' => array(
 		'password' => array(
 		    'label' => Yii::t('user', 'Изменить пароль'),
-		    'imageUrl' => Yii::app()->baseUrl . '/images/key.png',
-		    'url' => 'array("pwdChange","id"=>$data->id)',
-		    'options' => array(
-			'class' => 'pwdChange',
-		    ),
-		),
+		    'imageUrl' => Yii::app()->request->baseUrl.'/web/images/key.gif',
+		    'url' => 'array("/user/default/changepassword/","id"=>$data->id)',		   
+		 ),
 	    ),
 	),
     ),
 ));
 ?>
-
-<?php $this->widget('ext.fancybox.EFancyBox',array(
-    'target'=>'.pwdChange',
-)); ?>

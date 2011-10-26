@@ -9,15 +9,9 @@ class CategoryModule extends YWebModule
         );
     }
 
-
     public function getCategory()
     {
         return Yii::t('category', 'Контент');
-    }
-
-    public function getEditableParams()
-    {
-        return array('adminMenuOrder');
     }
 
     public function getName()
@@ -32,7 +26,7 @@ class CategoryModule extends YWebModule
 
     public function getAuthor()
     {
-        return Yii::t('category', 'Опейкин Андрей');
+        return Yii::t('category', 'xoma');
     }
 
     public function getAuthorEmail()

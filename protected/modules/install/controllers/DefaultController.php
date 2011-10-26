@@ -7,6 +7,8 @@ class DefaultController extends Controller
 
     private $alreadyInstalledFlag;
 
+    private $_freeActions = array('finish','sitesettings');
+
     public function init()
     {
         $this->alreadyInstalledFlag = Yii::app()->basePath . DIRECTORY_SEPARATOR . 'config' . DIRECTORY_SEPARATOR . '.ai';
@@ -15,24 +17,22 @@ class DefaultController extends Controller
     protected function beforeAction($action)
     {
         // проверка на то, что сайт уже установлен...
-        if (file_exists($this->alreadyInstalledFlag) && $this->action->id != 'finish' && $this->action->id != 'sitesettings')
-        {
-            throw new CHttpException(404, Yii::t('install', 'Страница не найдена!'));
-        }
+        if (file_exists($this->alreadyInstalledFlag) && !in_array($this->$_freeActions,$this->action->id))        
+            throw new CHttpException(404, Yii::t('install', 'Страница не найдена!'));        
 
         return parent::beforeAction($action);
     }
 
     public function actionIndex()
     {
-        $this->stepName = Yii::t('install', 'Шаг первый : "Приветствие!"');
+        $this->stepName = Yii::t('install', 'Шаг 1 из 6 : "Приветствие!"');
 
         $this->render('index');
     }
 
     public function actionRequirements()
     {
-        $this->stepName = Yii::t('install', 'Шаг второй : "Проверка системных требований"');
+        $this->stepName = Yii::t('install', 'Шаг 2 из 6 : "Проверка системных требований"');
 
 
         $requirements = array(
@@ -139,7 +139,7 @@ class DefaultController extends Controller
 
     public function actionDbsettings()
     {
-        $this->stepName = Yii::t('install', 'Шаг третий : "Соединение с базой данных"');
+        $this->stepName = Yii::t('install', 'Шаг 3 из 6 : "Соединение с базой данных"');
 
         $dbConfFile = Yii::app()->basePath . DIRECTORY_SEPARATOR . 'config' . DIRECTORY_SEPARATOR . 'db.php';
 
@@ -247,7 +247,7 @@ class DefaultController extends Controller
 
     public function actionCreateuser()
     {
-        $this->stepName = Yii::t('install', 'Шаг четвертый : "Создание учетной записи администратора"');
+        $this->stepName = Yii::t('install', 'Шаг 4 из 6 : "Создание учетной записи администратора"');
 
         $model = new CreateUserForm;
 
@@ -291,7 +291,7 @@ class DefaultController extends Controller
 
     public function actionSitesettings()
     {
-        $this->stepName = Yii::t('install', 'Шаг пятый : "Настройки проекта"');
+        $this->stepName = Yii::t('install', 'Шаг 5 из 6 : "Настройки проекта"');
 
         $model = new SiteSettingsForm();
 
@@ -307,10 +307,8 @@ class DefaultController extends Controller
                 {
                     $user = User::model()->admin()->findAll();
 
-                    if (count($user) > 1)
-                    {
-                        throw new CHttpException(500, Yii::t('install', 'Произошла ошибка при установке =('));
-                    }
+                    if (count($user) > 1)                    
+                        throw new CHttpException(500, Yii::t('install', 'Произошла ошибка при установке =('));                    
 
                     foreach (array('siteDescription', 'siteName', 'siteKeyWords') as $param)
                     {
@@ -323,19 +321,15 @@ class DefaultController extends Controller
                                                       'user_id' => $user[0]->id
                                                  ));
 
-                        if ($settings->save())
-                        {
-                            continue;
-                        }
-                        else
-                        {
-                            throw new CDbException(print_r($settings->getErrors(), true));
-                        }
+                        if ($settings->save())                        
+                            continue;                        
+                        else                        
+                            throw new CDbException(print_r($settings->getErrors(), true));                        
                     }
 
                     $transaction->commit();
 
-                    Yii::app()->user->setFlash(YFlashMessages::NOTICE_MESSAGE, Yii::t('install', 'Настройки сайта успешно сохранены!'));
+                    Yii::app()->user->setFlash(YFlashMessages::NOTICE_MESSAGE, Yii::t('install', 'Настройки сайта успешно сохранены!'));                 
 
                     $this->redirect(array('/install/default/finish/'));
                 }
@@ -355,7 +349,7 @@ class DefaultController extends Controller
 
     public function actionFinish()
     {
-        $this->stepName = Yii::t('install', 'Шаг пятый : "Окончание установки"');
+        $this->stepName = Yii::t('install', 'Шаг 6 из 6 : "Окончание установки"');
 
         $this->render('finish');
     }
@@ -368,5 +362,4 @@ class DefaultController extends Controller
 
         return $command->execute();
     }
-
 }

@@ -14,7 +14,7 @@ class ContestModule extends YWebModule
 
     public function getAuthor()
     {
-        return Yii::t('contest', 'Опейкин Андрей');
+        return Yii::t('contest', 'xoma');
     }
 
     public function getAuthorEmail()
@@ -32,12 +32,7 @@ class ContestModule extends YWebModule
     public function getCategory()
     {
         return Yii::t('contest', 'Сервисы');
-    }
-
-    public function getEditableParams()
-    {
-        return array('adminMenuOrder');
-    }
+    }    
 
     public function init()
     {

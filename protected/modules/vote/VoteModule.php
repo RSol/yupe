@@ -14,7 +14,7 @@ class VoteModule extends YWebModule
 
     public function getAuthor()
     {
-        return Yii::t('vote', 'Опейкин Андрей');
+        return Yii::t('vote', 'xoma');
     }
 
     public function getAuthorEmail()
@@ -32,11 +32,6 @@ class VoteModule extends YWebModule
     public function getCategory()
     {
         return Yii::t('vote', 'Сервисы');
-    }
-
-    public function getEditableParams()
-    {
-        return array('adminMenuOrder');
     }
 
     public function init()

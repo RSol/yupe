@@ -12,12 +12,7 @@ class GalleryModule extends YWebModule
     public function getCategory()
     {
         return Yii::t('gallery', 'Сервисы');
-    }
-
-    public function getEditableParams()
-    {
-        return array('adminMenuOrder');
-    }
+    }   
 
     public function getName()
     {
@@ -31,7 +26,7 @@ class GalleryModule extends YWebModule
 
     public function getAuthor()
     {
-        return Yii::t('gallery', 'Опейкин Андрей');
+        return Yii::t('gallery', 'xoma');
     }
 
     public function getAuthorEmail()

@@ -118,7 +118,7 @@ class User extends CActiveRecord
             array('nick_name, first_name, last_name, email','filter','filter' => 'trim'),
             array('nick_name, first_name, last_name, email','filter','filter' => array($obj = new CHtmlPurifier(),'purify')),
             array('nick_name, email, password', 'required'),
-            array('nick_name','match','pattern' => '/^[A-Za-z0-9]{2,50}$/','message' => Yii::t('seeline','Неверный формат поля "{attribute}" допустимы только буквы и цифры!')),            
+            array('nick_name','match','pattern' => '/^[A-Za-z0-9]{2,50}$/','message' => Yii::t('seeline','Неверный формат поля "{attribute}" допустимы только буквы и цифры, от 2 до 20 символов')),            
             array('first_name, last_name, nick_name, email', 'length', 'max' => 50),
             array('password, salt', 'length', 'max' => 32),
             array('registration_ip, activation_ip, registration_date', 'length', 'max' => 20),            
@@ -254,7 +254,7 @@ class User extends CActiveRecord
         if(!$this->hasErrors())
         {
             // проверим по таблице Registration
-            $registration = Registration::model()->find('email = :email', array(':email' => $email));
+            $registration = Registration::model()->find('email = :email', array(':email' => $this->email));
 
             if (!is_null($registration))        
                 $this->addError('email',Yii::t('user','Email "{email}" уже используется другим пользователем!',array('{email}' => $this->email)));
@@ -293,21 +293,12 @@ class User extends CActiveRecord
                              ));        
 		
 	    $this->save();                   
-    }
-    
-    public function newPassword($password)
+    }  
+
+    public function changePassword($password)
     {
-	$this->password = $password;
-	$this->setScenario('password');
-		
-	if($this->validate(array('password')))
-	{
-	    $salt = is_null($this->salt) ? Registration::model()->generateSalt() : $this->salt;
-	    $this->password = Registration::model()->hashPassword($password, $salt);
-	    
-	    return $this->update(array('password'));
-	}
-	
-	return false;
+        $this->password = Registration::model()->hashPassword($password, $this->salt);
+
+        return $this->update(array('password'));
     }
 }

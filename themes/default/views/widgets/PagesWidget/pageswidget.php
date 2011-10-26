@@ -14,7 +14,7 @@
         <?php if (!Yii::app()->user->isAuthenticated()): ?>
         <li><?php echo CHtml::link('Регистрация', array('/registration/'));?></li>
         <?php endif;?>
-        <li><?php echo CHtml::link('Социальные виджеты', array('/social/'));?></li>
+        <li><?php echo CHtml::link('Социальные виджеты', array('/site/social/'));?></li>
         <li><?php echo CHtml::link('Помощь проекту', array('/site/page/view/help/'));?></li>
         <li><?php echo CHtml::link('Контакты', array('/feedback/contact/'));?></li>
 
@@ -24,7 +24,7 @@
         <?php endforeach;?>
 
         <?php if (Yii::app()->user->isSuperUser()): ?>
-        <li><?php echo CHtml::link('Администрирование', array('/yupe/backend/'));?></li>
+        <li><?php echo CHtml::link('Панель управления', array('/yupe/backend/'));?></li>
         <?php endif;?>
     </ul>
 </div>
